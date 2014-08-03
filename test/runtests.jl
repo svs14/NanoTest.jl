@@ -1,5 +1,4 @@
 using NanoTest
-using Base.Test
 
 # Example spec runs without error (derived from Ruby MiniTest)
 type Meme end
