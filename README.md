@@ -9,7 +9,7 @@ This package is currently in development.
 
 The final release will provide:
 
-- Extendable API and configuration (Plugin-oriented architecture)
+- Extendable API and configuration (plugin-oriented architecture)
 - Behaviour Driven Development (BDD)
 - Parallel test execution
 - Markdown example code runner
