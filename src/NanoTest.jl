@@ -9,11 +9,11 @@ export describe,
        it,
        @expect
 
-type ContextBuilder
+type ContextHandler
   ctx_graph
   current_ctx_vertex
 
-  function ContextBuilder()
+  function ContextHandler()
     # Create graph with root context
     ctx_graph = graph(KeyVertex{Dict}[], Edge{KeyVertex{Dict}}[])
     ctx = {
@@ -27,51 +27,51 @@ type ContextBuilder
   end
 end
 
-function add_ctx!(ctx_builder::ContextBuilder, ctx)
+function add_ctx!(ctx_handler::ContextHandler, ctx)
   # Add new context vertex to graph
-  ctx_graph = ctx_builder.ctx_graph
+  ctx_graph = ctx_handler.ctx_graph
   new_ctx_vertex = make_vertex(ctx_graph, ctx)
   add_vertex!(ctx_graph, new_ctx_vertex)
 
   # Add edge from current context vertex to new context vertex
-  current_ctx_vertex = ctx_builder.current_ctx_vertex
+  current_ctx_vertex = ctx_handler.current_ctx_vertex
   add_edge!(ctx_graph, current_ctx_vertex, new_ctx_vertex)
 
   # Update current context vertex to new context vertex
-  ctx_builder.current_ctx_vertex = new_ctx_vertex
+  ctx_handler.current_ctx_vertex = new_ctx_vertex
 end
 
-default_ctx_builder = ContextBuilder()
+default_ctx_handler = ContextHandler()
 
-function before(func::Function; ctx_builder=default_ctx_builder)
+function before(func::Function; ctx_handler=default_ctx_handler)
   ctx = {
     :func => func,
     :type => :before
   }
-  add_ctx!(ctx_builder, ctx)
+  add_ctx!(ctx_handler, ctx)
 end
-function after(func::Function; ctx_builder=default_ctx_builder)
+function after(func::Function; ctx_handler=default_ctx_handler)
   ctx = {
     :func => func,
     :type => :after
   }
-  add_ctx!(ctx_builder, ctx)
+  add_ctx!(ctx_handler, ctx)
 end
-function describe(func::Function, desc::String; ctx_builder=default_ctx_builder)
+function describe(func::Function, desc::String; ctx_handler=default_ctx_handler)
   ctx = {
     :func => func,
     :desc => desc,
     :type => :describe
   }
-  add_ctx!(ctx_builder, ctx)
+  add_ctx!(ctx_handler, ctx)
 end
-function it(func::Function, desc::String; ctx_builder=default_ctx_builder)
+function it(func::Function, desc::String; ctx_handler=default_ctx_handler)
   ctx = {
     :func => func,
     :desc => desc,
     :type => :it
   }
-  add_ctx!(ctx_builder, ctx)
+  add_ctx!(ctx_handler, ctx)
 end
 
 macro expect(ex)
